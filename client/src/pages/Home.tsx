@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 import {
   FaClipboardList,
   FaUserCheck,
@@ -12,6 +13,7 @@ import {
 const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-indigo-100 to-indigo-200 text-gray-800 flex flex-col overflow-x-hidden">
+      <Navbar />
       {/* Hero */}
       <section className="relative text-center py-20 px-4 sm:px-6 bg-gradient-to-r from-indigo-700 via-purple-600 to-pink-500 text-white overflow-hidden shadow-lg rounded-b-3xl">
         <svg className="absolute left-0 top-0 w-full h-full opacity-20 pointer-events-none" viewBox="0 0 1440 320">
@@ -32,12 +34,21 @@ const Home = () => {
           >
             🚀 Get Started
           </Link>
-          <Link
-            to="/dashboard"
-            className="bg-white/10 border border-white/30 text-white font-semibold px-7 py-3 rounded-lg hover:bg-white hover:text-indigo-700 hover:scale-105 transition-all duration-200 text-base"
-          >
-            🎯 Explore Dashboard
-          </Link>
+          {typeof window !== 'undefined' && localStorage.getItem('token') ? (
+            <Link
+              to="/dashboard"
+              className="bg-white/10 border border-white/30 text-white font-semibold px-7 py-3 rounded-lg hover:bg-white hover:text-indigo-700 hover:scale-105 transition-all duration-200 text-base"
+            >
+              🎯 Explore Dashboard
+            </Link>
+          ) : (
+            <Link
+              to="/demo"
+              className="bg-white/10 border border-white/30 text-white font-semibold px-7 py-3 rounded-lg hover:bg-white hover:text-indigo-700 hover:scale-105 transition-all duration-200 text-base"
+            >
+              🎯 Explore Dashboard
+            </Link>
+          )}
         </div>
       </section>
 
