@@ -1,0 +1,44 @@
+# Root level
+node_modules/
+dist/
+.env
+.DS_Store
+*.log
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS files
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# TypeScript
+*.tsbuildinfo
+
+# Server specific
+server/node_modules/
+server/dist/
+server/.env
+
+# Client specific
+client/node_modules/
+client/dist/
+client/.env
+
+# Optional: Ignore build artifacts
+**/build/
+**/.parcel-cache/
+**/.next/
+**/.turbo/
