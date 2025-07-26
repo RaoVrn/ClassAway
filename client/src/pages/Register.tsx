@@ -1,56 +1,59 @@
+
 import React, { useState } from 'react';
-import { registerUser } from '../services/auth';
-import { useNavigate } from 'react-router-dom';
+import API from '../services/api';
 import Input from '../components/Input';
-import Navbar from '../components/Navbar';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     try {
-      const res = await registerUser({ name, email, password });
-      localStorage.setItem('token', res.data.token);
-      navigate('/dashboard');
+      await API.post('/auth/register', form);
+      navigate('/login');
     } catch (err: any) {
-      alert(err.response?.data?.msg || 'Registration failed');
+      setError(err.response?.data?.error || 'Registration failed');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-pink-100 px-2">
-      <Navbar />
-      <div className="flex justify-center items-center min-h-[calc(100vh-64px)]">
-        <form
-          onSubmit={handleRegister}
-          className="bg-white/90 border border-indigo-100 rounded-2xl shadow-xl w-full max-w-md p-8 sm:p-10 flex flex-col gap-5"
-        >
-          <h2 className="text-3xl font-extrabold text-center mb-2 bg-gradient-to-r from-indigo-700 via-pink-500 to-indigo-400 bg-clip-text text-transparent tracking-tight">Create Your Account</h2>
-          <p className="text-center text-gray-500 mb-2 text-sm">Sign up to start tracking your ODs, placements, and attendance.</p>
-          <Input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-          <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-indigo-600 to-pink-500 text-white font-bold py-3 rounded-xl shadow-md hover:scale-105 transition-all duration-200 text-base mt-2"
-          >
-            Register
-          </button>
-          <div className="text-center text-sm text-gray-600 mt-2">
-            Already have an account?{' '}
-            <a
-              href="/login"
-              className="text-indigo-600 font-semibold hover:underline hover:text-pink-500 transition"
-            >
-              Login
-            </a>
-          </div>
-        </form>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-500">
+      <form onSubmit={handleRegister} className="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
+        {error && <div className="text-red-500 mb-4">{error}</div>}
+        <Input
+          type="text"
+          placeholder="Name"
+          value={form.name}
+          onChange={e => setForm({ ...form, name: e.target.value })}
+        />
+        <Input
+          type="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={e => setForm({ ...form, email: e.target.value })}
+        />
+        <Input
+          type="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={e => setForm({ ...form, password: e.target.value })}
+        />
+        <button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white py-2 rounded font-semibold hover:from-blue-600 hover:to-purple-600 transition mt-4">
+          Register
+        </button>
+        <div className="mt-4 text-center">
+          Already have an account? <a href="/login" className="text-blue-600 hover:underline">Login</a>
+        </div>
+      </form>
     </div>
   );
 };

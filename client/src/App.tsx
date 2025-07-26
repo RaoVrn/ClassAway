@@ -7,23 +7,31 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Demo from './pages/Demo';
 import Profile from './pages/Profile';
+import Navbar from './components/Navbar';
+import ODList from './pages/ODList';
+import PlacementTracker from './pages/PlacementTracker';
 
 const App = () => {
   const token = localStorage.getItem('token');
 
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route
-        path="/dashboard"
-        element={token ? <Dashboard /> : <Navigate to="/login" />}
-      />
-      <Route path="/demo" element={<Demo />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="*" element={<Navigate to="/" />} />
-    </Routes>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/dashboard"
+          element={token ? <Dashboard /> : <Navigate to="/login" />}
+        />
+        <Route path="/od-list" element={token ? <ODList /> : <Navigate to="/login" />} />
+        <Route path="/placement-tracker" element={token ? <PlacementTracker /> : <Navigate to="/login" />} />
+        <Route path="/demo" element={<Demo />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </>
   );
 };
 

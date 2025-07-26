@@ -52,6 +52,8 @@ const Navbar = () => {
               {isSignedIn ? (
                 <>
                   <Link to="/dashboard" className="block px-4 py-2 hover:bg-indigo-50 rounded-t-xl transition" onClick={() => setDropdownOpen(false)}>Dashboard</Link>
+                  <Link to="/od-list" className="block px-4 py-2 hover:bg-indigo-50 transition" onClick={() => setDropdownOpen(false)}>OD List</Link>
+                  <Link to="/placement-tracker" className="block px-4 py-2 hover:bg-indigo-50 transition" onClick={() => setDropdownOpen(false)}>Placement Tracker</Link>
                   <Link to="/profile" className="block px-4 py-2 hover:bg-indigo-50 transition" onClick={() => setDropdownOpen(false)}>Profile</Link>
                   <button onClick={handleLogout} className="block w-full text-left px-4 py-2 hover:bg-pink-50 text-pink-600 rounded-b-xl transition">Logout</button>
                 </>
