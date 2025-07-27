@@ -3,15 +3,19 @@ const Placement = require('../models/Placement');
 // Create or update placement status for a company
 exports.upsertPlacement = async (req, res) => {
   try {
-    const { company, status } = req.body;
-    let placement = await Placement.findOne({ user: req.user.id, company });
-    if (placement) {
-      placement.status = status;
-      await placement.save();
-    } else {
-      placement = new Placement({ user: req.user.id, company, status });
-      await placement.save();
-    }
+    const { company, status, salaryRange, salary, jobType, jobRole, applicationDate } = req.body;
+    // Remove unique company constraint: always create a new placement
+    const placement = new Placement({
+      user: req.user.id,
+      company,
+      status,
+      salaryRange,
+      salary,
+      jobType,
+      jobRole,
+      applicationDate,
+    });
+    await placement.save();
     res.json(placement);
   } catch (err) {
     res.status(400).json({ error: err.message });

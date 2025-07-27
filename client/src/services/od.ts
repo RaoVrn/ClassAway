@@ -1,3 +1,8 @@
+// Add OD with JSON payload (no file upload)
+export const addOD = async (data: Partial<OD>): Promise<OD> => {
+  const res = await API.post('/od', data);
+  return res.data;
+};
 import API from './api';
 import { OD } from '../types/od';
 

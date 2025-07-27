@@ -7,6 +7,29 @@ const ODSchema = new mongoose.Schema({
   reason: { type: String, required: true },
   date: { type: Date, required: true },
   status: { type: String, enum: ['Applied', 'In Process', 'Approved', 'Rejected'], default: 'Applied' },
+  salaryRange: {
+    type: String,
+    enum: [
+      'Less than 5 LPA',
+      '5-10 LPA',
+      '10-20 LPA',
+      'Above 20 LPA',
+      'Not Disclosed',
+    ],
+    default: 'Not Disclosed',
+  },
+  jobType: {
+    type: String,
+    enum: [
+      'Intern',
+      'Intern leads to Full Time',
+      'Full Time',
+      'Other',
+    ],
+    default: 'Full Time',
+  },
+  jobRole: { type: String },
+  applicationDate: { type: Date },
   attachment: { type: String }, // file link
 }, { timestamps: true });
 

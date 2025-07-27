@@ -11,6 +11,10 @@ exports.createOD = async (req, res) => {
       ...req.body,
       user: req.user.id,
       attachment,
+      salaryRange: req.body.salaryRange,
+      jobType: req.body.jobType,
+      jobRole: req.body.jobRole,
+      applicationDate: req.body.applicationDate,
     });
     await od.save();
     res.status(201).json(od);
@@ -37,9 +41,16 @@ exports.getODs = async (req, res) => {
 // Update OD status
 exports.updateOD = async (req, res) => {
   try {
+    const updateFields = {
+      ...req.body,
+      salaryRange: req.body.salaryRange,
+      jobType: req.body.jobType,
+      jobRole: req.body.jobRole,
+      applicationDate: req.body.applicationDate,
+    };
     const od = await OD.findOneAndUpdate(
       { _id: req.params.id, user: req.user.id },
-      req.body,
+      updateFields,
       { new: true }
     );
     if (!od) return res.status(404).json({ error: 'OD not found' });

@@ -6,7 +6,12 @@ export const fetchPlacements = async (): Promise<Placement[]> => {
   return res.data;
 };
 
-export const upsertPlacement = async (company: string, status: string): Promise<Placement> => {
-  const res = await API.post('/placement', { company, status });
+
+export const upsertPlacement = async (placement: Partial<Placement>): Promise<Placement> => {
+  const res = await API.post('/placement', placement);
   return res.data;
+};
+
+export const deletePlacement = async (id: string): Promise<void> => {
+  await API.delete(`/placement/${id}`);
 };

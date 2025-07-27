@@ -48,19 +48,35 @@ const Navbar = () => {
             </svg>
           </button>
           {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-44 bg-white text-gray-800 rounded-xl shadow-lg py-2 z-50 border border-indigo-100 animate-fade-in-up">
+            <div className="absolute right-0 mt-2 w-56 bg-white text-gray-800 rounded-2xl shadow-2xl py-3 z-50 border border-indigo-100 animate-fade-in-up">
               {isSignedIn ? (
                 <>
-                  <Link to="/dashboard" className="block px-4 py-2 hover:bg-indigo-50 rounded-t-xl transition" onClick={() => setDropdownOpen(false)}>Dashboard</Link>
-                  <Link to="/od-list" className="block px-4 py-2 hover:bg-indigo-50 transition" onClick={() => setDropdownOpen(false)}>OD List</Link>
-                  <Link to="/placement-tracker" className="block px-4 py-2 hover:bg-indigo-50 transition" onClick={() => setDropdownOpen(false)}>Placement Tracker</Link>
-                  <Link to="/profile" className="block px-4 py-2 hover:bg-indigo-50 transition" onClick={() => setDropdownOpen(false)}>Profile</Link>
-                  <button onClick={handleLogout} className="block w-full text-left px-4 py-2 hover:bg-pink-50 text-pink-600 rounded-b-xl transition">Logout</button>
+                  {/* User avatar and name */}
+                  <div className="flex items-center gap-3 px-5 pb-3 border-b border-indigo-50 mb-2">
+                    <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-lg font-bold border-2 border-indigo-200">
+                      <svg className="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="8" r="4" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 20c0-2.5 3.5-4 8-4s8 1.5 8 4" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="font-bold text-indigo-700 leading-tight">Profile</div>
+                      <div className="text-xs text-gray-400">Signed in</div>
+                    </div>
+                  </div>
+                  <Link to="/dashboard" className="block px-5 py-2 hover:bg-indigo-50 rounded-t-xl transition" onClick={() => setDropdownOpen(false)}>Dashboard</Link>
+                  <Link to="/od-list" className="block px-5 py-2 hover:bg-indigo-50 transition" onClick={() => setDropdownOpen(false)}>OD List</Link>
+                  <Link to="/add-od" className="block px-5 py-2 hover:bg-indigo-50 transition text-indigo-600 font-semibold" onClick={() => setDropdownOpen(false)}>
+                    + Add OD
+                  </Link>
+                  <Link to="/placement-tracker" className="block px-5 py-2 hover:bg-indigo-50 transition" onClick={() => setDropdownOpen(false)}>Placement Tracker</Link>
+                  <Link to="/profile" className="block px-5 py-2 hover:bg-indigo-50 transition" onClick={() => setDropdownOpen(false)}>Profile</Link>
+                  <button onClick={handleLogout} className="block w-full text-left px-5 py-2 hover:bg-pink-50 text-pink-600 rounded-b-xl transition">Logout</button>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="block px-4 py-2 hover:bg-indigo-50 rounded-t-xl transition" onClick={() => setDropdownOpen(false)}>Login</Link>
-                  <Link to="/register" className="block px-4 py-2 hover:bg-indigo-50 rounded-b-xl transition" onClick={() => setDropdownOpen(false)}>Register</Link>
+                  <Link to="/login" className="block px-5 py-2 hover:bg-indigo-50 rounded-t-xl transition" onClick={() => setDropdownOpen(false)}>Login</Link>
+                  <Link to="/register" className="block px-5 py-2 hover:bg-indigo-50 rounded-b-xl transition" onClick={() => setDropdownOpen(false)}>Register</Link>
                 </>
               )}
             </div>

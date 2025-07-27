@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import AddOD from './pages/AddOD';
 import Demo from './pages/Demo';
 import Profile from './pages/Profile';
 import Navbar from './components/Navbar';
@@ -27,6 +28,7 @@ const App = () => {
         />
         <Route path="/od-list" element={token ? <ODList /> : <Navigate to="/login" />} />
         <Route path="/placement-tracker" element={token ? <PlacementTracker /> : <Navigate to="/login" />} />
+        <Route path="/add-od" element={token ? <AddOD /> : <Navigate to="/login" />} />
         <Route path="/demo" element={<Demo />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<Navigate to="/" />} />
