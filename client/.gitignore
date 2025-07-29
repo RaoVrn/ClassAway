@@ -1,4 +1,11 @@
-# client/.gitignore
+# dependencies
 node_modules
+
+# builds
 dist
+
+# Vite
+.vite
+
+# env vars
 .env
