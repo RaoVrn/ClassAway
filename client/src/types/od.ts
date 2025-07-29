@@ -10,4 +10,6 @@ export interface OD {
   date: string;
   status: ODStatus;
   attachment?: string;
+  description?: string;
+  dayOrder?: '1' | '2' | '3' | '4' | '5';
 }

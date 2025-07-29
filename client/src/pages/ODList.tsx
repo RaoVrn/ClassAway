@@ -63,6 +63,7 @@ const ODList: React.FC = () => {
               <thead>
                 <tr className="bg-gradient-to-r from-indigo-100 to-pink-100 text-indigo-700">
                   <th className="p-3 border-b font-semibold">Type</th>
+                  <th className="p-3 border-b font-semibold">DO</th>
                   <th className="p-3 border-b font-semibold">Title</th>
                   <th className="p-3 border-b font-semibold">Reason</th>
                   <th className="p-3 border-b font-semibold">Date</th>
@@ -80,6 +81,7 @@ const ODList: React.FC = () => {
                   ods.map(od => (
                     <tr key={od._id} className="hover:bg-indigo-50 transition">
                       <td className="p-3 border-b text-center font-medium">{od.type}</td>
+                      <td className="p-3 border-b text-center">{od.dayOrder ? `DO ${od.dayOrder}` : '—'}</td>
                       <td className="p-3 border-b">{od.title}</td>
                       <td className="p-3 border-b">{od.reason}</td>
                       <td className="p-3 border-b text-center">{od.date?.slice(0, 10)}</td>

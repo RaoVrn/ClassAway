@@ -28,17 +28,37 @@ const Navbar = () => {
     navigate('/');
   };
 
+
   return (
-    <nav className="w-full bg-gradient-to-r from-indigo-700 via-purple-600 to-pink-500 shadow text-white px-4 sm:px-8 py-3 flex items-center justify-between">
+    <nav className="w-full bg-gradient-to-r from-indigo-700 via-purple-600 to-pink-500 shadow text-white px-4 sm:px-10 py-3 flex items-center justify-between">
       <Link to="/" className="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-yellow-300 via-pink-300 to-indigo-400 bg-clip-text text-transparent">
         ClassAway
       </Link>
-      <div className="flex items-center gap-4 sm:gap-6 text-base font-semibold">
-        <Link to="/" className={`hover:underline hover:text-yellow-200 transition ${location.pathname === '/' ? 'underline text-yellow-200' : ''}`}>Home</Link>
-        <Link to="/demo" className={`hover:underline hover:text-yellow-200 transition ${location.pathname === '/demo' ? 'underline text-yellow-200' : ''}`}>Demo</Link>
+      <div className="flex items-center gap-1 sm:gap-2 md:gap-4 text-base font-semibold">
+        {[
+          { to: '/', label: 'Home' },
+          { to: '/demo', label: 'Demo' },
+          ...(isSignedIn ? [
+            { to: '/dashboard', label: 'Dashboard' },
+            { to: '/od-list', label: 'OD List' },
+            { to: '/add-od', label: 'Add OD' },
+            { to: '/placement-tracker', label: 'Placement Tracker' },
+          ] : [])
+        ].map(link => (
+          <Link
+            key={link.to}
+            to={link.to}
+            className={`px-4 py-2 rounded-xl transition font-medium focus:outline-none focus:ring-2 focus:ring-yellow-200
+              ${location.pathname === link.to
+                ? 'bg-white/20 text-yellow-200 shadow-sm'
+                : 'text-white hover:bg-white/10 hover:text-yellow-100'}`}
+          >
+            {link.label}
+          </Link>
+        ))}
         <div className="relative" ref={dropdownRef}>
           <button
-            className="ml-2 flex items-center justify-center w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-200 transition"
+            className="ml-2 flex items-center justify-center w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-200 transition shadow-lg"
             onClick={() => setDropdownOpen((v) => !v)}
             aria-label="User menu"
           >
@@ -48,12 +68,12 @@ const Navbar = () => {
             </svg>
           </button>
           {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-56 bg-white text-gray-800 rounded-2xl shadow-2xl py-3 z-50 border border-indigo-100 animate-fade-in-up">
+            <div className="absolute right-0 mt-2 w-60 bg-white text-gray-800 rounded-2xl shadow-2xl py-4 z-50 border border-gray-200 animate-fade-in-up drop-shadow-xl">
               {isSignedIn ? (
                 <>
                   {/* User avatar and name */}
-                  <div className="flex items-center gap-3 px-5 pb-3 border-b border-indigo-50 mb-2">
-                    <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-lg font-bold border-2 border-indigo-200">
+                  <div className="flex items-center gap-3 px-6 pb-4 border-b border-gray-100 mb-2">
+                    <div className="w-11 h-11 rounded-full bg-indigo-100 flex items-center justify-center text-lg font-bold border-2 border-indigo-200">
                       <svg className="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <circle cx="12" cy="8" r="4" />
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 20c0-2.5 3.5-4 8-4s8 1.5 8 4" />
@@ -64,19 +84,18 @@ const Navbar = () => {
                       <div className="text-xs text-gray-400">Signed in</div>
                     </div>
                   </div>
-                  <Link to="/dashboard" className="block px-5 py-2 hover:bg-indigo-50 rounded-t-xl transition" onClick={() => setDropdownOpen(false)}>Dashboard</Link>
-                  <Link to="/od-list" className="block px-5 py-2 hover:bg-indigo-50 transition" onClick={() => setDropdownOpen(false)}>OD List</Link>
-                  <Link to="/add-od" className="block px-5 py-2 hover:bg-indigo-50 transition text-indigo-600 font-semibold" onClick={() => setDropdownOpen(false)}>
-                    + Add OD
+                  <Link to="/profile" className="block px-6 py-2.5 rounded-xl transition font-medium text-gray-700 hover:bg-indigo-50 focus:bg-indigo-100 active:bg-indigo-100" onClick={() => setDropdownOpen(false)}>
+                    Profile
                   </Link>
-                  <Link to="/placement-tracker" className="block px-5 py-2 hover:bg-indigo-50 transition" onClick={() => setDropdownOpen(false)}>Placement Tracker</Link>
-                  <Link to="/profile" className="block px-5 py-2 hover:bg-indigo-50 transition" onClick={() => setDropdownOpen(false)}>Profile</Link>
-                  <button onClick={handleLogout} className="block w-full text-left px-5 py-2 hover:bg-pink-50 text-pink-600 rounded-b-xl transition">Logout</button>
+                  <div className="my-2 border-t border-gray-200 mx-3" />
+                  <button onClick={handleLogout} className="block w-full text-left px-6 py-2.5 rounded-xl transition font-medium text-pink-600 hover:bg-pink-50 focus:bg-pink-100 active:bg-pink-100">
+                    Logout
+                  </button>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="block px-5 py-2 hover:bg-indigo-50 rounded-t-xl transition" onClick={() => setDropdownOpen(false)}>Login</Link>
-                  <Link to="/register" className="block px-5 py-2 hover:bg-indigo-50 rounded-b-xl transition" onClick={() => setDropdownOpen(false)}>Register</Link>
+                  <Link to="/login" className="block px-6 py-2.5 rounded-t-xl transition font-medium text-gray-700 hover:bg-indigo-50 focus:bg-indigo-100 active:bg-indigo-100" onClick={() => setDropdownOpen(false)}>Login</Link>
+                  <Link to="/register" className="block px-6 py-2.5 rounded-b-xl transition font-medium text-gray-700 hover:bg-indigo-50 focus:bg-indigo-100 active:bg-indigo-100" onClick={() => setDropdownOpen(false)}>Register</Link>
                 </>
               )}
             </div>

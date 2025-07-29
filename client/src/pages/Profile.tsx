@@ -19,7 +19,8 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tool
 const Profile: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [form, setForm] = useState<any>({});
-  const [editMode, setEditMode] = useState(false);
+  const [personalEditMode, setPersonalEditMode] = useState<boolean>(false);
+  const [detailsEditMode, setDetailsEditMode] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [ods, setOds] = useState<any[]>([]);
@@ -54,7 +55,7 @@ const Profile: React.FC = () => {
   const handleNestedChange = (field: string, value: any) => {
     setForm({ ...form, [field]: value });
   };
-  const handleSave = async () => {
+  const handleSavePersonal = async () => {
     setError('');
     try {
       const token = localStorage.getItem('token');
@@ -62,7 +63,21 @@ const Profile: React.FC = () => {
       const updated = await updateProfile(form, token);
       setUser(updated);
       setForm(updated);
-      setEditMode(false);
+      setPersonalEditMode(false);
+    } catch (err) {
+      setError('Failed to update profile');
+    }
+  };
+
+  const handleSaveDetails = async () => {
+    setError('');
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('No token');
+      const updated = await updateProfile(form, token);
+      setUser(updated);
+      setForm(updated);
+      setDetailsEditMode(false);
     } catch (err) {
       setError('Failed to update profile');
     }
@@ -125,9 +140,10 @@ const Profile: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-100 py-12 px-4">
       <div className="w-full max-w-6xl mx-auto flex flex-col gap-10">
         {/* Container 1: Personal Info */}
+        {/* Container 1: Personal Info */}
         <div className="bg-white/95 rounded-3xl shadow-2xl border border-indigo-100 p-10 flex flex-col md:flex-row gap-8 items-center md:items-start relative">
           <button
-            onClick={() => setEditMode(true)}
+            onClick={() => setPersonalEditMode(true)}
             className="absolute top-6 right-6 bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-bold px-5 py-2 rounded-xl shadow hover:from-indigo-600 hover:to-pink-600 transition text-sm z-10"
           >
             Edit
@@ -149,27 +165,121 @@ const Profile: React.FC = () => {
           <div className="flex flex-col md:flex-row flex-[3] gap-8 w-full">
             {/* Details section */}
             <div className="flex flex-col gap-2 flex-1 justify-center">
-              <div className="text-4xl font-extrabold text-indigo-700 tracking-tight">{user.name}</div>
-              <div className="text-lg text-gray-500 font-mono">{user.email}</div>
-              <div className="flex flex-wrap gap-2 my-2">
-                <span className="bg-gradient-to-r from-indigo-400 to-pink-400 text-white px-4 py-1 rounded-full font-bold text-xs shadow">Active</span>
-                <span className="bg-gradient-to-r from-yellow-400 to-pink-300 text-white px-4 py-1 rounded-full font-bold text-xs shadow">Student</span>
-              </div>
-              <div className="flex flex-wrap gap-6 text-base text-gray-700 mt-2">
-                <span><span className="font-semibold text-indigo-700">Phone:</span> {user.phone || <span className="text-gray-400">Not added</span>}</span>
-                <span><span className="font-semibold text-indigo-700">Branch:</span> {user.branch}</span>
-                <span><span className="font-semibold text-indigo-700">Year:</span> {user.year}</span>
-                <span><span className="font-semibold text-indigo-700">Roll No:</span> {user.roll || <span className="text-gray-400">Not added</span>}</span>
-              </div>
-              <div className="mt-4">
-                <label className="block font-semibold text-indigo-700 mb-1">About</label>
-                <div className="text-gray-700 text-base">{user.bio || <span className="text-gray-400">No bio added.</span>}</div>
-              </div>
+              {personalEditMode ? (
+                <>
+                  <input
+                    type="text"
+                    name="name"
+                    value={form.name || ''}
+                    onChange={handleChange}
+                    className="text-4xl font-extrabold text-indigo-700 tracking-tight border-b-2 border-indigo-200 focus:outline-none focus:border-indigo-500"
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    value={form.email || ''}
+                    onChange={handleChange}
+                    className="text-lg text-gray-500 font-mono border-b-2 border-indigo-200 focus:outline-none focus:border-indigo-500"
+                  />
+                  <div className="flex flex-wrap gap-2 my-2">
+                    <span className="bg-gradient-to-r from-indigo-400 to-pink-400 text-white px-4 py-1 rounded-full font-bold text-xs shadow">Active</span>
+                    <span className="bg-gradient-to-r from-yellow-400 to-pink-300 text-white px-4 py-1 rounded-full font-bold text-xs shadow">Student</span>
+                  </div>
+                  <div className="flex flex-wrap gap-6 text-base text-gray-700 mt-2">
+                    <span>
+                      <span className="font-semibold text-indigo-700">Phone:</span>{' '}
+                      <input
+                        type="text"
+                        name="phone"
+                        value={form.phone || ''}
+                        onChange={handleChange}
+                        className="border-b-2 border-indigo-200 focus:outline-none focus:border-indigo-500"
+                        placeholder="Not added"
+                      />
+                    </span>
+                    <span>
+                      <span className="font-semibold text-indigo-700">Branch:</span>{' '}
+                      <input
+                        type="text"
+                        name="branch"
+                        value={form.branch || ''}
+                        onChange={handleChange}
+                        className="border-b-2 border-indigo-200 focus:outline-none focus:border-indigo-500"
+                      />
+                    </span>
+                    <span>
+                      <span className="font-semibold text-indigo-700">Year:</span>{' '}
+                      <input
+                        type="text"
+                        name="year"
+                        value={form.year || ''}
+                        onChange={handleChange}
+                        className="border-b-2 border-indigo-200 focus:outline-none focus:border-indigo-500"
+                      />
+                    </span>
+                    <span>
+                      <span className="font-semibold text-indigo-700">Roll No:</span>{' '}
+                      <input
+                        type="text"
+                        name="roll"
+                        value={form.roll || ''}
+                        onChange={handleChange}
+                        className="border-b-2 border-indigo-200 focus:outline-none focus:border-indigo-500"
+                        placeholder="Not added"
+                      />
+                    </span>
+                  </div>
+                  <div className="mt-4">
+                    <label className="block font-semibold text-indigo-700 mb-1">About</label>
+                    <textarea
+                      name="bio"
+                      value={form.bio || ''}
+                      onChange={handleChange}
+                      className="w-full border-b-2 border-indigo-200 focus:outline-none focus:border-indigo-500 resize-y"
+                      rows={3}
+                      placeholder="No bio added."
+                    ></textarea>
+                  </div>
+                  <div className="flex gap-4 mt-4">
+                    <button
+                      onClick={handleSavePersonal}
+                      className="bg-gradient-to-r from-indigo-600 to-pink-500 text-white font-bold px-6 py-2 rounded-xl shadow hover:from-indigo-700 hover:to-pink-600 transition"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => { setPersonalEditMode(false); setForm(user); }}
+                      className="bg-gradient-to-r from-gray-300 to-gray-400 text-gray-800 font-bold px-6 py-2 rounded-xl shadow hover:from-gray-400 hover:to-gray-500 transition"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="text-4xl font-extrabold text-indigo-700 tracking-tight">{user.name}</div>
+                  <div className="text-lg text-gray-500 font-mono">{user.email}</div>
+                  <div className="flex flex-wrap gap-2 my-2">
+                    <span className="bg-gradient-to-r from-indigo-400 to-pink-400 text-white px-4 py-1 rounded-full font-bold text-xs shadow">Active</span>
+                    <span className="bg-gradient-to-r from-yellow-400 to-pink-300 text-white px-4 py-1 rounded-full font-bold text-xs shadow">Student</span>
+                  </div>
+                  <div className="flex flex-wrap gap-6 text-base text-gray-700 mt-2">
+                    <span><span className="font-semibold text-indigo-700">Phone:</span> {user.phone || <span className="text-gray-400">Not added</span>}</span>
+                    <span><span className="font-semibold text-indigo-700">Branch:</span> {user.branch}</span>
+                    <span><span className="font-semibold text-indigo-700">Year:</span> {user.year}</span>
+                    <span><span className="font-semibold text-indigo-700">Roll No:</span> {user.roll || <span className="text-gray-400">Not added</span>}</span>
+                  </div>
+                  <div className="mt-4">
+                    <label className="block font-semibold text-indigo-700 mb-1">About</label>
+                    <div className="text-gray-700 text-base">{user.bio || <span className="text-gray-400">No bio added.</span>}</div>
+                  </div>
+                </>
+              )}
             </div>
             {/* Welcome card section - improved styling */}
             <div className="flex-1 flex flex-col items-center md:items-end w-full md:mt-0 mt-4">
               <div className="bg-gradient-to-br from-white via-indigo-50 to-pink-100 rounded-2xl shadow-xl p-8 max-w-xs w-full border border-indigo-100 flex flex-col items-start gap-2">
-                <h2 className="text-2xl font-bold text-indigo-700 mb-1">Welcome back, {user.name?.split(' ')[0] || 'User'}! <span className='ml-1'>🎉</span></h2>
+                <h2 className="text-2xl font-bold text-indigo-700 mb-1">Welcome back, {user.name?.split(' ')[0] || 'User'}! <span className='ml-1'></span></h2>
                 <p className="text-gray-700 text-base mb-1 leading-relaxed">Here's a quick snapshot of your journey so far. Keep pushing forward and make the most of every opportunity!</p>
                 <p className="text-indigo-500 font-semibold italic border-l-4 border-indigo-300 pl-3 mt-2">"Success is the sum of small efforts, repeated day in and day out."</p>
               </div>
@@ -180,16 +290,16 @@ const Profile: React.FC = () => {
         {/* Container 2: Profile Details (Edit) - Only Edit button, no empty sections */}
         <div className="bg-white/95 rounded-3xl shadow-2xl border border-indigo-100 p-10 flex flex-col gap-6 relative min-h-[100px]">
           <button
-            onClick={() => setEditMode(editMode ? '' : 'all')}
+            onClick={() => setDetailsEditMode(!detailsEditMode)}
             className="absolute top-6 right-6 bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-bold px-5 py-2 rounded-xl shadow hover:from-indigo-600 hover:to-pink-600 transition text-sm z-10"
           >
-            {editMode ? 'Close' : 'Edit'}
+            {detailsEditMode ? 'Close' : 'Edit'}
           </button>
           <div className="flex flex-col gap-4 mt-2">
             {/* Skills */}
             <div>
               <span className="font-semibold text-indigo-700 text-lg">Skills</span>
-              {editMode ? (
+              {detailsEditMode ? (
                 <div className="flex flex-col gap-2 mt-1">
                   {(form.skills && form.skills.length > 0 ? form.skills : []).map((item: string, idx: number) => (
                     <div key={idx} className="flex items-center gap-2">
@@ -244,7 +354,7 @@ const Profile: React.FC = () => {
             {/* Interests */}
             <div>
               <span className="font-semibold text-indigo-700 text-lg">Interests</span>
-              {editMode ? (
+              {detailsEditMode ? (
                 <div className="flex flex-col gap-2 mt-1">
                   {(form.interests && form.interests.length > 0 ? form.interests : []).map((item: string, idx: number) => (
                     <div key={idx} className="flex items-center gap-2">
@@ -299,7 +409,7 @@ const Profile: React.FC = () => {
             {/* Education */}
             <div>
               <span className="font-semibold text-indigo-700 text-lg">Education</span>
-              {editMode ? (
+              {detailsEditMode ? (
                 <div className="flex flex-col gap-2 mt-1">
                   {(form.education && form.education.length > 0 ? form.education : []).map((item: string, idx: number) => (
                     <div key={idx} className="flex items-center gap-2">
@@ -354,7 +464,7 @@ const Profile: React.FC = () => {
             {/* Achievements */}
             <div>
               <span className="font-semibold text-indigo-700 text-lg">Achievements</span>
-              {editMode ? (
+              {detailsEditMode ? (
                 <div className="flex flex-col gap-2 mt-1">
                   {(form.achievements && form.achievements.length > 0 ? form.achievements : []).map((item: string, idx: number) => (
                     <div key={idx} className="flex items-center gap-2">
@@ -409,7 +519,7 @@ const Profile: React.FC = () => {
             {/* Projects */}
             <div>
               <span className="font-semibold text-indigo-700 text-lg">Projects</span>
-              {editMode ? (
+              {detailsEditMode ? (
                 <div className="flex flex-col gap-2 mt-1">
                   {(form.projects && form.projects.length > 0 ? form.projects : []).map((item: string, idx: number) => (
                     <div key={idx} className="flex items-center gap-2">
@@ -464,7 +574,7 @@ const Profile: React.FC = () => {
             {/* Certifications */}
             <div>
               <span className="font-semibold text-indigo-700 text-lg">Certifications</span>
-              {editMode ? (
+              {detailsEditMode ? (
                 <div className="flex flex-col gap-2 mt-1">
                   {(form.certifications && form.certifications.length > 0 ? form.certifications : []).map((item: string, idx: number) => (
                     <div key={idx} className="flex items-center gap-2">
@@ -517,16 +627,16 @@ const Profile: React.FC = () => {
               )}
             </div>
             {/* Save/Cancel buttons */}
-            {editMode && (
+            {detailsEditMode && (
               <div className="flex gap-4 mt-4">
                 <button
-                  onClick={handleSave}
+                  onClick={handleSaveDetails}
                   className="bg-gradient-to-r from-indigo-600 to-pink-500 text-white font-bold px-6 py-2 rounded-xl shadow hover:from-indigo-700 hover:to-pink-600 transition"
                 >
                   Save
                 </button>
                 <button
-                  onClick={() => { setEditMode(''); setForm(user); }}
+                  onClick={() => { setDetailsEditMode(false); setForm(user); }}
                   className="bg-gradient-to-r from-gray-300 to-gray-400 text-gray-800 font-bold px-6 py-2 rounded-xl shadow hover:from-gray-400 hover:to-gray-500 transition"
                 >
                   Cancel

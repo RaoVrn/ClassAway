@@ -121,9 +121,9 @@ function PlacementTracker() {
   const shortlisted = placements.filter((p: Placement) => p.status === 'Shortlisted').length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 py-12 px-4">
-      <div className="max-w-6xl mx-auto bg-white/95 rounded-3xl shadow-2xl border border-indigo-100 p-10">
-        <h1 className="text-4xl font-extrabold mb-8 text-center bg-gradient-to-r from-indigo-700 to-pink-500 bg-clip-text text-transparent tracking-tight">Placement Tracker</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-100 py-12 px-4">
+      <div className="w-full max-w-7xl mx-auto bg-white/95 rounded-3xl shadow-2xl border border-indigo-200 p-14 flex flex-col items-center">
+        <h1 className="text-5xl font-extrabold text-center mb-10 bg-gradient-to-r from-indigo-700 to-pink-500 bg-clip-text text-transparent tracking-tight drop-shadow-lg">Placement Tracker</h1>
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-10">
           <div className="bg-white rounded-xl shadow p-5 flex flex-col items-center border border-indigo-100">

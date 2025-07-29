@@ -15,6 +15,7 @@ exports.createOD = async (req, res) => {
       jobType: req.body.jobType,
       jobRole: req.body.jobRole,
       applicationDate: req.body.applicationDate,
+      dayOrder: req.body.dayOrder,
     });
     await od.save();
     res.status(201).json(od);
@@ -47,6 +48,7 @@ exports.updateOD = async (req, res) => {
       jobType: req.body.jobType,
       jobRole: req.body.jobRole,
       applicationDate: req.body.applicationDate,
+      dayOrder: req.body.dayOrder,
     };
     const od = await OD.findOneAndUpdate(
       { _id: req.params.id, user: req.user.id },

@@ -1,3 +1,4 @@
+// (moved below)
 import React, { useEffect, useState } from 'react';
 import { fetchODs } from '../services/od';
 import { fetchPlacements } from '../services/placement';
@@ -30,6 +31,13 @@ const COLORS = ['#6366f1', '#f472b6', '#facc15', '#34d399'];
 
 const Dashboard: React.FC = () => {
   const [ods, setOds] = useState<OD[]>([]);
+  // DO-wise OD count for visualization
+  const doCounts = React.useMemo(() => {
+    return [1, 2, 3, 4, 5].map((doNum) => ({
+      name: `DO ${doNum}`,
+      value: ods.filter((od) => od.dayOrder === String(doNum)).length,
+    }));
+  }, [ods]);
   const [placements, setPlacements] = useState<Placement[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null); // State to hold error messages
@@ -93,7 +101,7 @@ const Dashboard: React.FC = () => {
 
   // Data transformation for Stacked Bar Chart
   const processPlacementDataForStack = (placementsData: Placement[]) => {
-    const companyDataMap = new Map<string, { [key: string]: number }>();
+    const companyDataMap: Map<string, any> = new Map();
     const statusOrder = ['Offer', 'Interview', 'Test', 'Shortlisted']; // Define order for consistent stacking
 
     placementsData.forEach(p => {
@@ -206,7 +214,7 @@ const Dashboard: React.FC = () => {
                 <StatCard title="Rejected ODs" value={odStats.rejected} color="text-red-500" icon={<MdOutlineCancel className="h-8 w-8" />} />
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10">
                 <ChartCard title="OD Type Distribution">
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={odPieData}>
@@ -227,6 +235,18 @@ const Dashboard: React.FC = () => {
                       <YAxis tick={{ fontSize: 12 }} />
                       <Tooltip formatter={(value) => `${value}`} contentStyle={{ backgroundColor: 'rgba(0,0,0,0.7)', color: 'white', borderRadius: '8px' }} labelStyle={{ color: 'white' }} />
                       <Bar dataKey="value" fill="#f472b6" barSize={30} radius={[10, 10, 0, 0]} animationBegin={0} animationDuration={500} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </ChartCard>
+
+                <ChartCard title="ODs by Day Order (DO)">
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={doCounts}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                      <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                      <YAxis tick={{ fontSize: 12 }} allowDecimals={false} />
+                      <Tooltip formatter={(value) => `${value} ODs`} contentStyle={{ backgroundColor: 'rgba(0,0,0,0.7)', color: 'white', borderRadius: '8px' }} labelStyle={{ color: 'white' }} />
+                      <Bar dataKey="value" fill="#facc15" barSize={30} radius={[10, 10, 0, 0]} animationBegin={0} animationDuration={500} />
                     </BarChart>
                   </ResponsiveContainer>
                 </ChartCard>

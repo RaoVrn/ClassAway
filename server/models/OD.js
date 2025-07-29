@@ -31,6 +31,7 @@ const ODSchema = new mongoose.Schema({
   jobRole: { type: String },
   applicationDate: { type: Date },
   attachment: { type: String }, // file link
+  dayOrder: { type: String, enum: ['1', '2', '3', '4', '5'], required: false },
 }, { timestamps: true });
 
 module.exports = mongoose.model('OD', ODSchema);
